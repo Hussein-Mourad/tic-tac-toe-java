@@ -188,11 +188,18 @@ public class TicTacToe {
         return false;
     }
 
-
     private int computerTurn() {
-        // TODO
+        // TODO: Make a computer turn
         return 0;
     }
+
+    private void resetGame(){
+       // TODO: Make a method that restarts a new game
+    }
+    private void menu(){
+        // TODO: Make a method that lets the user choose player vs player or player vs computer or computer vs player
+    }
+
 
     /**
      * Takes input from the user
@@ -217,6 +224,7 @@ public class TicTacToe {
      */
     public void launch() {
         printBoard();
+        // TODO: Modify this function so it shows the user a menu
 
         while (true) {
             int position = playerTurn();
@@ -232,6 +240,8 @@ public class TicTacToe {
             }
             printBoard();
             if (isWinner()) {
+                // TODO: Modify this function when a user win show a menu if he wants to start a new game or he want to exit
+                resetGame();
                 break;
             }
         }
