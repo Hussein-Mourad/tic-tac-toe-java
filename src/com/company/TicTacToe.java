@@ -1,7 +1,6 @@
 package com.company;
 
 
-import java.io.IOException;
 import java.util.*;
 
 public class TicTacToe {
@@ -10,13 +9,13 @@ public class TicTacToe {
     private final char horizontalSeparator = '|';
     private final char verticalSeparator = '-';
     private final char joint = '+';
-    private String[][] board = new String[7][6];
+    private final String[][] board = new String[7][6];
+    private final boolean computer = false;
+    private final Map<Integer, ArrayList> moveToIndexMap = new HashMap<Integer, ArrayList>();
+    private final HashSet<Integer> playedMovesSet = new HashSet<Integer>();
     private char winner;
     private char turn = X;
     private int round = 1;
-    private boolean computer = false;
-    private Map<Integer, ArrayList> moveToIndexMap = new HashMap<Integer, ArrayList>();
-    private HashSet<Integer> playedMovesSet = new HashSet<Integer>();
 
 
     public TicTacToe() {
@@ -28,6 +27,7 @@ public class TicTacToe {
      * @throws IllegalArgumentException if turn is not X or O
      */
     public TicTacToe(char turn) {
+        // Ensures valid input
         if (turn != 'X' && turn != 'O') {
             throw new IllegalArgumentException(" Turn takes either X or O");
         }
@@ -40,12 +40,15 @@ public class TicTacToe {
      * Example:
      * 1 to maps [0,0]
      * 2 maps to [0,1] ...etc
+     * also it initializes the board
      */
     private void mapMovesToIndex() {
         /* maps numbers to indices*/
         int counter = 1;
         for (int i = 0; i < 7; i++) {
             for (int j = 0; j < 6; j++) {
+                // initializing the board
+                this.board[i][j] = String.valueOf(counter);
                 ArrayList arr = new ArrayList();
                 arr.add(i);
                 arr.add(j);
@@ -59,25 +62,42 @@ public class TicTacToe {
      * Prints the Game board to the console
      * It loops over each element and separates it with horizontal separator
      * At the end of each line it separates it with vertical separator and Joint separator
+     * If it is the first round it prints numbers to guide the user
+     * When the first move is made it only prints the moves
      */
     private void printBoard() {
+        if (round == 1) {
+            System.out.println("Enter the number corresponding to the place you want to play: \n");
+        }
         for (int i = 0; i < 7; i++) {
             for (int j = 0; j < 6; j++) {
-                String item = this.board[i][j];
-                if (this.board[i][j] == null) {
+                // handles showing the numbers at round 1 and removes them afterwards
+                String item = board[i][j];
+                if (round == 1) {
+                    item = board[i][j];
+                } else if (!board[i][j].equals(X + "") && !board[i][j].equals(O + "")) {
                     item = " ";
                 }
-                System.out.print(" " + item + " ");
+                System.out.print("\t" + item + "\t");
+                // Removes extra horizontal separator at the end
                 if (j != 5) {
                     System.out.print(horizontalSeparator);
                 }
             }
             System.out.println();
 
-            for (int j = 0; j < 5; j++) {
-                System.out.print("" + verticalSeparator + verticalSeparator + verticalSeparator + joint);
-                if (j == 4) {
-                    System.out.print("" + verticalSeparator + verticalSeparator + verticalSeparator);
+            for (int j = 0; j < 6; j++) {
+                // fixes wrong vertical line at first col
+                if (j == 0) {
+                    System.out.print(verticalSeparator);
+                }
+                // prints vertical line
+                for (int k = 0; k < 7; k++) {
+                    System.out.print(verticalSeparator);
+                }
+                // removes extra joint
+                if (j != 5) {
+                    System.out.print(joint);
                 }
             }
             System.out.println();
@@ -90,10 +110,7 @@ public class TicTacToe {
      * @param move Takes a move as an int
      */
     private boolean isValidMove(int move) {
-        if (this.playedMovesSet.contains(move)) {
-            return false;
-        }
-        return true;
+        return !this.playedMovesSet.contains(move);
     }
 
     /**
@@ -111,10 +128,13 @@ public class TicTacToe {
             return false;
         }
         getTurn();
+        // Adds the move to played moves
         this.playedMovesSet.add(move);
+        // Gets corresponding index
         ArrayList position = moveToIndexMap.get(move);
         int row = (int) position.get(0);
         int col = (int) position.get(1);
+        // Inserts the move into the board
         this.board[row][col] = String.valueOf(this.turn);
         round++;
         return true;
@@ -125,13 +145,6 @@ public class TicTacToe {
      * It doesn't change the turn if it is the first round
      */
     private void getTurn() {
-//        if (round %2 ==0){
-//            this.turn = O;
-//            return;
-//        }
-//        this.turn =X;
-//        return;
-
         if (round == 1) return;
         if (this.turn == O) {
             this.turn = X;
@@ -153,42 +166,61 @@ public class TicTacToe {
         }
         if (playedMovesSet.size() >= 5) {
             for (int i = 0; i < 5; i++) {
-                String row = null;
-                String col =null;
                 for (int j = 0; j < 4; j++) {
-                    row += board[i][j];
-
-//                    // Checks horizontal moves
-//                    if (board[i][j] != null && board[i][j + 1] != null && board[i][j + 2] != null &&
-//                            board[i][j].equals(board[i][j + 1]) && board[i][j + 1].equals(board[i][j + 2])) {
-//                        System.out.println("Player " + board[i][j] + " has won!");
-//                        return true;
-//                    }
-//                    // Checks vertical moves
-//                    if (board[i][j] != null && board[i + 1][j] != null && board[i + 2][j] != null &&
-//                            board[i][j].equals(board[i + 1][j]) && board[i + 1][j].equals(board[i + 2][j])) {
-//                        System.out.println("Player " + board[i][j] + " has won!");
-//                        return true;
-//                    }
-//                    // Checks diagonal moves
-//                    if (board[i][j] != null && board[i + 1][j + 1] != null && board[i + 2][j + 2] != null &&
-//                            board[i][j].equals(board[i + 1][j + 1]) && board[i + 1][j + 1].equals(board[i + 2][j + 2])) {
-//                        System.out.println("Player " + board[i][j] + " has won!");
-//                        return true;
-//                    }
+                    // Checks horizontal moves
+                    if (board[i][j].equals(board[i][j + 1]) && board[i][j + 1].equals(board[i][j + 2])) {
+                        System.out.println("Player " + board[i][j] + " has won!");
+                        return true;
+                    }
+                    // Checks vertical moves
+                    if (board[i][j].equals(board[i + 1][j]) && board[i + 1][j].equals(board[i + 2][j])) {
+                        System.out.println("Player " + board[i][j] + " has won!");
+                        return true;
+                    }
+                    // Checks diagonal moves
+                    if (board[i][j].equals(board[i + 1][j + 1]) && board[i + 1][j + 1].equals(board[i + 2][j + 2])) {
+                        System.out.println("Player " + board[i][j] + " has won!");
+                        return true;
+                    }
                 }
-                System.out.println(row.contains("XXX") || row.contains("OOO"));
             }
         }
         return false;
     }
 
+
+    private int computerTurn() {
+        // TODO
+        return 0;
+    }
+
+    /**
+     * Takes input from the user
+     */
+    private int playerTurn() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter a valid move [1-42]:");
+        try {
+            int position = scanner.nextInt();
+            return position;
+        } catch (Exception inputException) {
+            // Returns a number out of range so the user gets an error
+            return 100;
+        }
+    }
+
+    /**
+     * Main Logic of the game
+     * It keeps the game working and takes input from the user and checks if its a valid move
+     * If its a valid move it plays it
+     * If there is a winner the game will stop
+     */
     public void launch() {
         printBoard();
+
         while (true) {
-            Scanner scanner = new Scanner(System.in);
-            System.out.println("Enter a number [1-42]:");
-            int position = scanner.nextInt();
+            int position = playerTurn();
+
             if (position < 1 || position > 42) {
                 System.out.println("Invalid move");
                 continue;
@@ -205,7 +237,4 @@ public class TicTacToe {
         }
     }
 
-    private void display() {
-
-    }
 }
