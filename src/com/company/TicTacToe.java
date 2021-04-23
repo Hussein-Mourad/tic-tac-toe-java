@@ -6,14 +6,9 @@ import java.util.*;
 public class TicTacToe {
     private final char X = 'X';
     private final char O = 'O';
-    private final char horizontalSeparator = '|';
-    private final char verticalSeparator = '-';
-    private final char joint = '+';
     private final String[][] board = new String[7][6];
-    private final boolean computer = false;
-    private final Map<Integer, ArrayList> moveToIndexMap = new HashMap<Integer, ArrayList>();
-    private final HashSet<Integer> playedMovesSet = new HashSet<Integer>();
-    private char winner;
+    private final Map<Integer, ArrayList<Integer>> moveToIndexMap = new HashMap<>();
+    private final HashSet<Integer> playedMovesSet = new HashSet<>();
     private char turn = X;
     private int round = 1;
 
@@ -49,7 +44,7 @@ public class TicTacToe {
             for (int j = 0; j < 6; j++) {
                 // initializing the board
                 this.board[i][j] = String.valueOf(counter);
-                ArrayList arr = new ArrayList();
+                ArrayList<Integer> arr = new ArrayList<>();
                 arr.add(i);
                 arr.add(j);
                 moveToIndexMap.put(counter++, arr);
@@ -81,6 +76,7 @@ public class TicTacToe {
                 System.out.print("\t" + item + "\t");
                 // Removes extra horizontal separator at the end
                 if (j != 5) {
+                    char horizontalSeparator = '|';
                     System.out.print(horizontalSeparator);
                 }
             }
@@ -88,6 +84,7 @@ public class TicTacToe {
 
             for (int j = 0; j < 6; j++) {
                 // fixes wrong vertical line at first col
+                char verticalSeparator = '-';
                 if (j == 0) {
                     System.out.print(verticalSeparator);
                 }
@@ -97,6 +94,7 @@ public class TicTacToe {
                 }
                 // removes extra joint
                 if (j != 5) {
+                    char joint = '+';
                     System.out.print(joint);
                 }
             }
@@ -131,9 +129,9 @@ public class TicTacToe {
         // Adds the move to played moves
         this.playedMovesSet.add(move);
         // Gets corresponding index
-        ArrayList position = moveToIndexMap.get(move);
-        int row = (int) position.get(0);
-        int col = (int) position.get(1);
+        ArrayList<Integer> position = moveToIndexMap.get(move);
+        int row =  position.get(0);
+        int col =  position.get(1);
         // Inserts the move into the board
         this.board[row][col] = String.valueOf(this.turn);
         round++;
@@ -208,8 +206,7 @@ public class TicTacToe {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter a valid move [1-42]:");
         try {
-            int position = scanner.nextInt();
-            return position;
+            return scanner.nextInt();
         } catch (Exception inputException) {
             // Returns a number out of range so the user gets an error
             return 100;
