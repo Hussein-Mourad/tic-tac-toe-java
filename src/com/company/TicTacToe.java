@@ -62,7 +62,7 @@ public class TicTacToe {
      * If it is the first round it prints numbers to guide the user
      * When the first move is made it only prints the moves
      */
-    private void printBoard() {
+    private void  () {
         if (round == 1) {
             System.out.println("Enter the number corresponding to the place you want to play: \n");
         }
@@ -229,10 +229,10 @@ public class TicTacToe {
     public void launch() {
 
 
-            int i,j;
+            int i,j, int counter = 1;
             for(i=0; i<7; i++) {
                 for(j=0; j<6; j++)
-                    board[i][j]=" ";
+                    board[i][j]="";
 
 
         }
