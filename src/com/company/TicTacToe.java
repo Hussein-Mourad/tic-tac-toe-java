@@ -69,13 +69,13 @@ public class TicTacToe {
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 7; j++) {
                 // handles showing the numbers at round 1 and removes them afterwards
-                String item = board[i][j];
-                if (round == 1) {
-                    item = board[i][j];
-                } else if (!board[i][j].equals(X + "") && !board[i][j].equals(O + "")) {
-//                    item = " ";
-                }
-                System.out.print("\t" + item + "\t");
+//                String item = board[i][j];
+//                if (round == 1) {
+//                    item = board[i][j];
+//                } else if (!board[i][j].equals(X + "") && !board[i][j].equals(O + "")) {
+////                    item = " ";
+//                }
+                System.out.print("\t" + board[i][j] + "\t");
                 // Removes extra horizontal separator at the end
                 if (j != 6) {
                     char horizontalSeparator = '|';
