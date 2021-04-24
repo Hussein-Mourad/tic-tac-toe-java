@@ -1,6 +1,7 @@
 package com.company;
 
 
+import java.net.StandardSocketOptions;
 import java.util.*;
 
 public class TicTacToe {
@@ -9,6 +10,7 @@ public class TicTacToe {
     private final String[][] board = new String[7][6];
     private final Map<Integer, ArrayList<Integer>> moveToIndexMap = new HashMap<>();
     private final HashSet<Integer> playedMovesSet = new HashSet<>();
+
     private char turn = X;
     private int round = 1;
 
@@ -186,22 +188,24 @@ public class TicTacToe {
         return false;
     }
 
-    private int computerTurn() {
-        // TODO: Make a computer turn
-        return 0;
-    }
-
     private void resetGame(){
-       // TODO: Make a method that restarts a new game
+
+    Scanner x = new Scanner(System.in);
+    System.out.println("press 1 to restart or 0 to exit");
+        int m = x.nextInt();
+    if(m == 1) {
+        launch();
+        private final HashSet<Integer> playedMovesSet = new HashSet<>();
     }
-    private void menu(){
-        // TODO: Make a method that lets the user choose player vs player or player vs computer or computer vs player
+            else if(m == 0)
+                System.exit(0);
+            else{
+                System.out.println("Invalid input!");
+                resetGame();
+    }
     }
 
 
-    /**
-     * Takes input from the user
-     */
     private int playerTurn() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter a valid move [1-42]:");
@@ -213,6 +217,7 @@ public class TicTacToe {
         }
     }
 
+
     /**
      * Main Logic of the game
      * It keeps the game working and takes input from the user and checks if its a valid move
@@ -220,11 +225,22 @@ public class TicTacToe {
      * If there is a winner the game will stop
      */
     public void launch() {
+
+
+            int i,j;
+            for(i=0; i<7; i++) {
+                for(j=0; j<6; j++)
+                    board[i][j]=" ";
+
+
+        }
         printBoard();
-        // TODO: Modify this function so it shows the user a menu
+
 
         while (true) {
             int position = playerTurn();
+
+
 
             if (position < 1 || position > 42) {
                 System.out.println("Invalid move");
@@ -235,9 +251,10 @@ public class TicTacToe {
             if (!play) {
                 continue;
             }
+
             printBoard();
             if (isWinner()) {
-                // TODO: Modify this function when a user win show a menu if he wants to start a new game or he want to exit
+
                 resetGame();
                 break;
             }
