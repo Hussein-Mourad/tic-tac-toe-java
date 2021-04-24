@@ -184,7 +184,7 @@ public class TicTacToe {
                             return true;
                         }
                         // Checks second diagonal moves
-                        if (board[i][j].equals(board[i - 1][j - 1]) && board[i - 1][j - 1].equals(board[i - 2][j - 2])) {
+                        if (board[i][j].equals(board[i - 1][j + 1]) && board[i - 1][j + 1].equals(board[i - 2][j + 2])) {
                             System.out.println("Player " + board[i][j] + " has won!");
                             return true;
                         }
@@ -241,7 +241,7 @@ public class TicTacToe {
      */
     private int playerTurn() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter a valid move [1-42]: (Player " + turn + "'s turn)");
+        System.out.println("Enter a valid move [1-42]: (" + turn + " turn)");
         try {
             return scanner.nextInt();
         } catch (Exception inputException) {
@@ -272,10 +272,12 @@ public class TicTacToe {
             if (!play) {
                 continue;
             }
+
+            printBoard();
             if (isWinner()) {
                 resetGame();
+                printBoard();
             }
-            printBoard();
         }
     }
 
