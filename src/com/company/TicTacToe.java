@@ -1,15 +1,14 @@
 package com.company;
 
 
-import java.net.StandardSocketOptions;
 import java.util.*;
 
 public class TicTacToe {
     private final char X = 'X';
     private final char O = 'O';
-    private  String[][] board = new String[7][6];
-    private  Map<Integer, ArrayList<Integer>> moveToIndexMap = new HashMap<>();
-    private  HashSet<Integer> playedMovesSet = new HashSet<>();
+    private String[][] board = new String[6][7];
+    private Map<Integer, ArrayList<Integer>> moveToIndexMap = new HashMap<>();
+    private HashSet<Integer> playedMovesSet = new HashSet<>();
 
     private char turn = X;
     private int round = 1;
@@ -42,8 +41,8 @@ public class TicTacToe {
     private void mapMovesToIndex() {
         /* maps numbers to indices*/
         int counter = 1;
-        for (int i = 0; i < 7; i++) {
-            for (int j = 0; j < 6; j++) {
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 7; j++) {
                 // initializing the board
                 this.board[i][j] = String.valueOf(counter);
                 ArrayList<Integer> arr = new ArrayList<>();
@@ -62,29 +61,30 @@ public class TicTacToe {
      * If it is the first round it prints numbers to guide the user
      * When the first move is made it only prints the moves
      */
-    private void  () {
+    private void printBoard() {
         if (round == 1) {
             System.out.println("Enter the number corresponding to the place you want to play: \n");
         }
-        for (int i = 0; i < 7; i++) {
-            for (int j = 0; j < 6; j++) {
+
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 7; j++) {
                 // handles showing the numbers at round 1 and removes them afterwards
                 String item = board[i][j];
                 if (round == 1) {
                     item = board[i][j];
                 } else if (!board[i][j].equals(X + "") && !board[i][j].equals(O + "")) {
-                    item = " ";
+//                    item = " ";
                 }
                 System.out.print("\t" + item + "\t");
                 // Removes extra horizontal separator at the end
-                if (j != 5) {
+                if (j != 6) {
                     char horizontalSeparator = '|';
                     System.out.print(horizontalSeparator);
                 }
             }
             System.out.println();
 
-            for (int j = 0; j < 6; j++) {
+            for (int j = 0; j < 7; j++) {
                 // fixes wrong vertical line at first col
                 char verticalSeparator = '-';
                 if (j == 0) {
@@ -95,7 +95,7 @@ public class TicTacToe {
                     System.out.print(verticalSeparator);
                 }
                 // removes extra joint
-                if (j != 5) {
+                if (j != 6) {
                     char joint = '+';
                     System.out.print(joint);
                 }
@@ -132,8 +132,8 @@ public class TicTacToe {
         this.playedMovesSet.add(move);
         // Gets corresponding index
         ArrayList<Integer> position = moveToIndexMap.get(move);
-        int row =  position.get(0);
-        int col =  position.get(1);
+        int row = position.get(0);
+        int col = position.get(1);
         // Inserts the move into the board
         this.board[row][col] = String.valueOf(this.turn);
         round++;
@@ -165,22 +165,31 @@ public class TicTacToe {
             return true;
         }
         if (playedMovesSet.size() >= 5) {
-            for (int i = 0; i < 5; i++) {
-                for (int j = 0; j < 4; j++) {
-                    // Checks horizontal moves
-                    if (board[i][j].equals(board[i][j + 1]) && board[i][j + 1].equals(board[i][j + 2])) {
-                        System.out.println("Player " + board[i][j] + " has won!");
-                        return true;
-                    }
-                    // Checks vertical moves
-                    if (board[i][j].equals(board[i + 1][j]) && board[i + 1][j].equals(board[i + 2][j])) {
-                        System.out.println("Player " + board[i][j] + " has won!");
-                        return true;
-                    }
-                    // Checks diagonal moves
-                    if (board[i][j].equals(board[i + 1][j + 1]) && board[i + 1][j + 1].equals(board[i + 2][j + 2])) {
-                        System.out.println("Player " + board[i][j] + " has won!");
-                        return true;
+            for (int i = 0; i < 6; i++) {
+                for (int j = 0; j < 7; j++) {
+                    try {
+                        // Checks horizontal moves
+                        if (board[i][j].equals(board[i][j + 1]) && board[i][j + 1].equals(board[i][j + 2])) {
+                            System.out.println("Player " + board[i][j] + " has won!");
+                            return true;
+                        }
+                        // Checks vertical moves
+                        if (board[i][j].equals(board[i + 1][j]) && board[i + 1][j].equals(board[i + 2][j])) {
+                            System.out.println("Player " + board[i][j] + " has won!");
+                            return true;
+                        }
+                        // Checks first diagonal moves
+                        if (board[i][j].equals(board[i + 1][j + 1]) && board[i + 1][j + 1].equals(board[i + 2][j + 2])) {
+                            System.out.println("Player " + board[i][j] + " has won!");
+                            return true;
+                        }
+                        // Checks second diagonal moves
+                        if (board[i][j].equals(board[i - 1][j - 1]) && board[i - 1][j - 1].equals(board[i - 2][j - 2])) {
+                            System.out.println("Player " + board[i][j] + " has won!");
+                            return true;
+                        }
+                    } catch (Exception IndexOutOfBound) {
+                        // Handles If the index is out of bound
                     }
                 }
             }
@@ -188,29 +197,51 @@ public class TicTacToe {
         return false;
     }
 
-    private void resetGame(){
-
-    Scanner x = new Scanner(System.in);
-    System.out.println("press 1 to restart or 0 to exit");
-        int m = x.nextInt();
-    if(m == 1) {
+    /**
+     * Starts a new game by returning all the values to its initial state
+     * It prints a menu to the user where he can choose between 1 and 2
+     * If he enters 1 it starts a new game
+     * If he enters 2 it stops the program
+     */
+    private void resetGame() {
+        // Resets the game
         playedMovesSet.clear();
-       this.round=1;
-        this.turn=X;
-        launch();
-    }
-            else if(m == 0)
-                System.exit(0);
-            else{
+        this.round = 1;
+        this.turn = X;
+        int counter = 1;
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 7; j++) {
+                this.board[i][j] = String.valueOf(counter++);
+            }
+        }
+
+        Scanner scanner = new Scanner(System.in);
+        int input;
+        // Keeps asking the using until he inputs a valid value
+        while (true) {
+            System.out.println("Choose an Option:\n 1-New Game\n 2-Exit");
+            try {
+                input = scanner.nextInt();
+                // Exits if the input is 2
+                if (input == 2) System.exit(0);
+                // start a new game if the input is out
+                if (input == 1) break;
+                // Handles invalid input
                 System.out.println("Invalid input!");
-                resetGame();
-    }
+            } catch (Exception inputException) {
+                // Handles invalid input type
+                System.out.println("Invalid input!");
+            }
+
+        }
     }
 
-
+    /**
+     * It asks the user for a move and returns it if it is valid
+     */
     private int playerTurn() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter a valid move [1-42]:");
+        System.out.println("Enter a valid move [1-42]: (Player " + turn + "'s turn)");
         try {
             return scanner.nextInt();
         } catch (Exception inputException) {
@@ -227,22 +258,10 @@ public class TicTacToe {
      * If there is a winner the game will stop
      */
     public void launch() {
-
-
-            int i,j, int counter = 1;
-            for(i=0; i<7; i++) {
-                for(j=0; j<6; j++)
-                    board[i][j]="";
-
-
-        }
         printBoard();
-
 
         while (true) {
             int position = playerTurn();
-
-
 
             if (position < 1 || position > 42) {
                 System.out.println("Invalid move");
@@ -253,13 +272,10 @@ public class TicTacToe {
             if (!play) {
                 continue;
             }
-
-            printBoard();
             if (isWinner()) {
-
                 resetGame();
-                break;
             }
+            printBoard();
         }
     }
 
