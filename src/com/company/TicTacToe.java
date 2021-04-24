@@ -7,9 +7,9 @@ import java.util.*;
 public class TicTacToe {
     private final char X = 'X';
     private final char O = 'O';
-    private final String[][] board = new String[7][6];
-    private final Map<Integer, ArrayList<Integer>> moveToIndexMap = new HashMap<>();
-    private final HashSet<Integer> playedMovesSet = new HashSet<>();
+    private  String[][] board = new String[7][6];
+    private  Map<Integer, ArrayList<Integer>> moveToIndexMap = new HashMap<>();
+    private  HashSet<Integer> playedMovesSet = new HashSet<>();
 
     private char turn = X;
     private int round = 1;
@@ -194,8 +194,10 @@ public class TicTacToe {
     System.out.println("press 1 to restart or 0 to exit");
         int m = x.nextInt();
     if(m == 1) {
+        playedMovesSet.clear();
+       this.round=1;
+        this.turn=X;
         launch();
-        private final HashSet<Integer> playedMovesSet = new HashSet<>();
     }
             else if(m == 0)
                 System.exit(0);
