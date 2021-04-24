@@ -109,7 +109,7 @@ public class TicTacToe {
      *
      * @param move Takes a move as an int
      */
-    private boolean isValidMove(int move) {
+    private boolean isValidMove(int move ) {
         return !this.playedMovesSet.contains(move);
     }
 
