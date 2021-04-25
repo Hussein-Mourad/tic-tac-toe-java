@@ -24,7 +24,7 @@ public class TicTacToe {
      */
     public TicTacToe(char turn) {
         // Ensures valid input
-        if (turn != 'X' && turn != 'O') {
+        if (turn != X && turn != O) {
             throw new IllegalArgumentException(" Turn takes either X or O");
         }
         this.turn = turn;
@@ -41,8 +41,8 @@ public class TicTacToe {
     private void mapMovesToIndex() {
         /* maps numbers to indices*/
         int counter = 1;
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 7; j++) {
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[1].length; j++) {
                 // initializing the board
                 this.board[i][j] = String.valueOf(counter);
                 ArrayList<Integer> arr = new ArrayList<>();
@@ -58,23 +58,14 @@ public class TicTacToe {
      * Prints the Game board to the console
      * It loops over each element and separates it with horizontal separator
      * At the end of each line it separates it with vertical separator and Joint separator
-     * If it is the first round it prints numbers to guide the user
-     * When the first move is made it only prints the moves
      */
     private void printBoard() {
         if (round == 1) {
             System.out.println("Enter the number corresponding to the place you want to play: \n");
         }
 
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 7; j++) {
-                // handles showing the numbers at round 1 and removes them afterwards
-//                String item = board[i][j];
-//                if (round == 1) {
-//                    item = board[i][j];
-//                } else if (!board[i][j].equals(X + "") && !board[i][j].equals(O + "")) {
-////                    item = " ";
-//                }
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
                 System.out.print("\t" + board[i][j] + "\t");
                 // Removes extra horizontal separator at the end
                 if (j != 6) {
@@ -84,7 +75,7 @@ public class TicTacToe {
             }
             System.out.println();
 
-            for (int j = 0; j < 7; j++) {
+            for (int j = 0; j < board[0].length; j++) {
                 // fixes wrong vertical line at first col
                 char verticalSeparator = '-';
                 if (j == 0) {
@@ -109,7 +100,7 @@ public class TicTacToe {
      *
      * @param move Takes a move as an int
      */
-    private boolean isValidMove(int move ) {
+    private boolean isValidMove(int move) {
         return !this.playedMovesSet.contains(move);
     }
 
@@ -160,13 +151,9 @@ public class TicTacToe {
      * It checks if any then
      */
     private boolean isWinner() {
-        if (round == 42) {
-            System.out.println("Tie");
-            return true;
-        }
-        if (playedMovesSet.size() >= 5) {
-            for (int i = 0; i < 6; i++) {
-                for (int j = 0; j < 7; j++) {
+        if (playedMovesSet.size() >= 5) { // no need to check before 5 moves
+            for (int i = 0; i < board.length; i++) {
+                for (int j = 0; j < board[0].length; j++) {
                     try {
                         // Checks horizontal moves
                         if (board[i][j].equals(board[i][j + 1]) && board[i][j + 1].equals(board[i][j + 2])) {
@@ -194,6 +181,10 @@ public class TicTacToe {
                 }
             }
         }
+        if (round == 42) {
+            System.out.println("Tie");
+            return true;
+        }
         return false;
     }
 
@@ -209,8 +200,8 @@ public class TicTacToe {
         this.round = 1;
         this.turn = X;
         int counter = 1;
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 7; j++) {
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
                 this.board[i][j] = String.valueOf(counter++);
             }
         }
@@ -232,7 +223,6 @@ public class TicTacToe {
                 // Handles invalid input type
                 System.out.println("Invalid input!");
             }
-
         }
     }
 
@@ -279,6 +269,24 @@ public class TicTacToe {
                 printBoard();
             }
         }
+    }
+
+    /**
+     * It test the class
+     */
+    public void test() {
+        Integer[] moves = {9, 8, 1, 17, 3, 15, 2};
+        for (Integer move : moves) {
+            play(move);
+        }
+        printBoard();
+        System.out.println();
+        if (isWinner()) {
+            System.out.println("Everything works as expected");
+            return;
+        }
+        System.out.println("Doesn't work as expected");
+
     }
 
 }

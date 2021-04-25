@@ -2,7 +2,7 @@ package com.company;
 
 public class Main {
     public static void main(String[] args) {
-        TicTacToe tictactoe = new TicTacToe('O');
+        TicTacToe tictactoe = new TicTacToe();
         tictactoe.launch();
     }
 }
