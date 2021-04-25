@@ -6,9 +6,9 @@ import java.util.*;
 public class TicTacToe {
     private final char X = 'X';
     private final char O = 'O';
-    private String[][] board = new String[6][7];
-    private Map<Integer, ArrayList<Integer>> moveToIndexMap = new HashMap<>();
-    private HashSet<Integer> playedMovesSet = new HashSet<>();
+    private final String[][] board = new String[6][7];
+    private final Map<Integer, ArrayList<Integer>> moveToIndexMap = new HashMap<>();
+    private final HashSet<Integer> playedMovesSet = new HashSet<>();
 
     private char turn = X;
     private int round = 1;
